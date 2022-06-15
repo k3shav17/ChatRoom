@@ -16,7 +16,8 @@ public class Client implements Runnable {
 	public void run() {
 
 		try {
-			client = new Socket("127.0.0.1", 8989);
+			String address = "127.0.0.1";
+			client = new Socket(address, 8989);
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
@@ -25,7 +26,6 @@ public class Client implements Runnable {
 			t.start();
 
 			String inMessage;
-
 			while ((inMessage = in.readLine()) != null) {
 				System.out.println(inMessage);
 			}
@@ -43,7 +43,7 @@ public class Client implements Runnable {
 				client.close();
 			}
 		} catch (Exception e) {
-			// Ignore
+			e.printStackTrace();
 		}
 	}
 
@@ -53,7 +53,6 @@ public class Client implements Runnable {
 		public void run() {
 
 			try {
-
 				BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
 				while (!done) {
 					String message = inReader.readLine();
@@ -65,16 +64,13 @@ public class Client implements Runnable {
 						out.println(message);
 					}
 				}
-
 			} catch (IOException e) {
 				shutdown();
 			}
 		}
-
 	}
 
 	public static void main(String[] args) {
-
 		Client client = new Client();
 		client.run();
 	}
